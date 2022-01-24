@@ -26,7 +26,6 @@ let timerInterval = null;
 
 
 initBtn.addEventListener('click', (e)=>{
-    console.log('uo')
     init();
     e.target.style.display = 'none'
 })
@@ -125,8 +124,10 @@ function checkSame(firstElement, secondElement){
     let second = secondElement.dataset.value
     if(first && second && first === second){
         setTimeout(()=>{
-            firstElement.style.visibility = 'hidden'
-            secondElement.style.visibility = 'hidden'
+            // firstElement.style.visibility = 'hidden'
+            // secondElement.style.visibility = 'hidden'
+            firstElement.classList.add('removed')
+            secondElement.classList.add('removed')
             score +=2
             setScore(score)
 
@@ -134,7 +135,18 @@ function checkSame(firstElement, secondElement){
     emptySelection();
     }
 }
-
+function startTimer(){
+    timerDiv.style.display = 'block'
+    clearInterval(timerInterval);
+    timerInterval = setInterval(()=>{
+        time+=1
+        timerDiv.textContent = time;
+        if(time > 500) {
+            clearInterval(timerInterval);
+            location.reload();
+        } 
+    },1000)
+}
 function addListener() {
     board.addEventListener('click',(e)=>{
         let currentElement = e.target.offsetParent.offsetParent;
@@ -158,14 +170,5 @@ function addListener() {
             checkSame(firstElement, secondElement)
         }
     })
-    timerDiv.style.display = 'block'
-    clearInterval(timerInterval);
-    timerInterval = setInterval(()=>{
-        time+=1
-        timerDiv.textContent = time;
-        if(time > 500) {
-            clearInterval(timerInterval);
-            location.reload();
-        } 
-    },1000)
+   startTimer();
 }
